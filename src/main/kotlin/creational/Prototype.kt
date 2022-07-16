@@ -23,10 +23,11 @@ class Database: Cloneable {
     // Prototype of the table
     // if we don't make any changes new table will be exactly like this
     init {
-        name = "Model"
-        mTables.add("sysusers")
-        mTables.add("sysindexes")
-        mTables.add("sysfiles")
+        name = "model"
+        mTables.add("users")
+        mTables.add("indexes")
+        mTables.add("files")
+        mTables.add("preferences")
     }
 
     // Additional elements to be added to prototype table
@@ -39,6 +40,7 @@ class Database: Cloneable {
         for (i in 0 until mTables.size) {
             println(mTables[i])
         }
+        println("-----------------")
     }
 
     override fun clone(): Database {
@@ -46,27 +48,23 @@ class Database: Cloneable {
     }
 }
 
-object PrototypeTest {
-    @JvmStatic
-    fun main(args: Array<String>){
-        try {
-            val md1 = Database()
+// TEST
+fun main(){
+    try {
+        val md = Database()
 
-            val db1 = md1.clone() as Database
-            db1.setName("StockTrace")
-            db1.addTable("Stocks")
-            println(db1.getName())
-            db1.listTable()
+        val db1 = md.clone()
+        db1.setName("Depot")
+        db1.addTable("stocks")
+        println(db1.getName())
+        db1.listTable()
 
-            println("-----------------")
-
-            val db2 = md1.clone() as Database
-            db2.setName("CRM")
-            db2.addTable("Customers")
-            println(db2.getName())
-            db2.listTable()
-        } catch (e: CloneNotSupportedException) {
-            println(e.message)
-        }
+        val db2 = md.clone()
+        db2.setName("Website")
+        db2.addTable("admins")
+        println(db2.getName())
+        db2.listTable()
+    } catch (e: CloneNotSupportedException) {
+        println(e.message)
     }
 }

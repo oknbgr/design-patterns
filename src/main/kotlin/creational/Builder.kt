@@ -8,9 +8,9 @@ package creational
 // Real life example of this pattern could be how cars are built.
 // A car must have an engine and tires but keyless entry is extra.
 
-enum class Brands(val id: Int){
-    BMW(1),
-    AUDI(2)
+enum class Brands {
+    BMW,
+    MERCEDES
 }
 
 object Customer {
@@ -21,12 +21,12 @@ object Customer {
         val agency = Agency()
 
         when (brand) {
-            Brands.AUDI -> {
-                val a = agency.requestAudi(
+            Brands.MERCEDES -> {
+                val m = agency.requestMercedes(
                     model,
                     *requestedParts
                 )
-                println(a.toString())
+                println(m.toString())
             }
             Brands.BMW -> {
                 val b = agency.requestBMW(
@@ -54,14 +54,14 @@ class Agency {
         return factory!!.produce(model) as BMW
     }
 
-    fun requestAudi(model: String, vararg requests: String) : Audi {
-        factory = AudiFactory()
+    fun requestMercedes(model: String, vararg requests: String) : Mercedes {
+        factory = MercedesFactory()
 
         for (request in requests){
             factory!!.addPart(request)
         }
 
-        return factory!!.produce(model) as Audi
+        return factory!!.produce(model) as Mercedes
     }
 }
 
@@ -71,19 +71,19 @@ abstract class Factory {
     abstract fun produce(model: String): Car
 }
 
-class AudiFactory : Factory(){
-    // Audi Factory -> Factory
-    // Audi Factory -> Audi
+class MercedesFactory : Factory(){
+    // Mercedes Factory -> Factory
+    // Mercedes Factory -> Mercedes
 
-    private val audi = Audi()
+    private val m = Mercedes()
 
     override fun addPart(part: String) {
-        audi.optionalParts!!.add(part)
+        m.optionalParts!!.add(part)
     }
 
     override fun produce(model: String): Car {
-        audi.set(model)
-        return audi
+        m.set(model)
+        return m
     }
 }
 
@@ -91,15 +91,15 @@ class BMWFactory : Factory(){
     // BMW Factory -> Factory
     // BMW Factory -> BMW
 
-    private val bmw = BMW()
+    private val b = BMW()
 
     override fun addPart(part: String) {
-        bmw.optionalParts!!.add(part)
+        b.optionalParts!!.add(part)
     }
 
     override fun produce(model: String): Car {
-        bmw.set(model)
-        return bmw
+        b.set(model)
+        return b
     }
 }
 
@@ -107,7 +107,7 @@ abstract class Car {
     // All cars have to be built with necessary parts and optional parts are added on special request.
     // For this reason, optionalParts array list is nullable.
 
-    protected var necessaryParts: ArrayList<String>
+    private var necessaryParts: ArrayList<String>
     var optionalParts: ArrayList<String>? = null
     protected var model: String? = null
 
@@ -123,10 +123,37 @@ abstract class Car {
 
         optionalParts = ArrayList()
     }
+
+    override fun toString(): String {
+        val sb = StringBuilder()
+
+        if (model != null){
+            sb.append(String.format("${javaClass.simpleName} $model\n\r"))
+        } else {
+            sb.append(String.format("${javaClass.simpleName}\n\r"))
+        }
+
+        sb.append("\nNecessary Parts:\n")
+        for (i in 0 until necessaryParts.size){
+            sb.append(necessaryParts[i] + "\n\r")
+        }
+
+        if (optionalParts != null){
+            sb.append("\nOptions:\n")
+
+            for (i in 0 until optionalParts!!.size){
+                sb.append(optionalParts!![i] + "\n\r")
+            }
+        }
+
+        sb.append("------------------------------\n")
+
+        return sb.toString()
+    }
 }
 
-class Audi : Car() {
-    // Audi -> Car
+class Mercedes : Car() {
+    // Mercedes -> Car
 
     fun get(): String? {
         return super.model
@@ -134,21 +161,6 @@ class Audi : Car() {
 
     fun set(model: String?){
         super.model = model
-    }
-
-    override fun toString(): String {
-        val sb = StringBuilder()
-        sb.append(String.format("AUDI $model\n\r"))
-
-        for (i in 0 until necessaryParts.size){
-            sb.append(necessaryParts[i] + "\n\r")
-        }
-
-        for (i in 0 until super.optionalParts!!.size){
-            sb.append(super.optionalParts!![i] + "\n\r")
-        }
-
-        return sb.toString()
     }
 }
 
@@ -162,38 +174,19 @@ class BMW : Car() {
     fun set(model: String?){
         super.model = model
     }
-
-    override fun toString(): String {
-        val sb = StringBuilder()
-        sb.append(String.format("BMW $model\n\r"))
-
-        for (i in 0 until necessaryParts.size){
-            sb.append(necessaryParts[i] + "\n\r")
-        }
-
-        for (i in 0 until super.optionalParts!!.size){
-            sb.append(super.optionalParts!![i] + "\n\r")
-        }
-
-        return sb.toString()
-    }
 }
 
-object BuilderTest {
-    @JvmStatic
-    fun main(args: Array<String>){
-        Customer.requestCar(
-            Brands.BMW,
-            "M4",
-            "Ceramic Brakes", "Forged Wheels", "Carbon Fibre Spoiler"
-            )
+// TEST
+fun main(){
+    Customer.requestCar(
+        Brands.BMW,
+        "M4",
+        "Ceramic Brakes", "Forged Wheels", "Carbon Fibre Spoiler"
+    )
 
-        println("--------------------------")
-
-        Customer.requestCar(
-            Brands.AUDI,
-            "RS7",
-            "Gray Metallic Paint", "Bose Sound System", "Keyless Entry"
-        )
-    }
+    Customer.requestCar(
+        Brands.MERCEDES,
+        "AMG GT",
+        "Gray Metallic Paint", "Burmester Sound System", "Keyless Entry"
+    )
 }

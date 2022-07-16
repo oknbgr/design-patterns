@@ -36,12 +36,8 @@ class USCentralBank : Bank() {
 
 // Note: Sometimes this pattern is only used for readability.
 // TEST
-object FactoryMethodTest {
-    @JvmStatic
-    fun main(args: Array<String>){
-        val bank = USCentralBank()
-        val usd = bank.printMoney(1000) as USDollar
-
-        println(usd.getNominalValue())
-    }
+fun main(){
+    val bank = USCentralBank()
+    val usd = bank.printMoney(1000) as USDollar
+    println(usd.getNominalValue())
 }

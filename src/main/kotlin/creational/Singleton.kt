@@ -35,23 +35,20 @@ class Sample protected constructor() {
 }
 
 // TEST
-object SingletonTest {
-    @JvmStatic
-    fun main(args: Array<String>){
-        val obj1 = Sample.createObject()
-        val obj2 = Sample.createObject()
-        val obj3 = Sample.createObject()
+fun main(){
+    val o1 = Sample.createObject()
+    val o2 = Sample.createObject()
+    val o3 = Sample.createObject()
 
-        obj1.setData(1234)
-        println("obj1 data: " + obj1.getData())
-        println("obj2 data: " + obj2.getData())
-        println("obj3 data: " + obj3.getData())
+    o1.setData(1234)
+    println("object 1 data: " + o1.getData())
+    println("object 2 data: " + o2.getData())
+    println("object 3 data: " + o3.getData())
 
-        println("-------------------------")
+    println("-------------------------")
 
-        obj2.setData(4321)
-        println("obj1 data: " + obj1.getData())
-        println("obj2 data: " + obj2.getData())
-        println("obj3 data: " + obj3.getData())
-    }
+    o2.setData(4321)
+    println("object 1 data: " + o1.getData())
+    println("object 2 data: " + o2.getData())
+    println("object 3 data: " + o3.getData())
 }
