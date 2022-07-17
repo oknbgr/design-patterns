@@ -7,17 +7,17 @@ package behavioral
 // The best real life example of this pattern is how we use compilers in computers
 
 // Handler Object
-class Operator(name: String){
+class Representative(name: String){
     private var name: String = ""
     var isAvailable: Boolean = false
-    var nextOperator: Operator? = null
+    var nextRepresentative: Representative? = null
 
     init {
         this.name = name
     }
 
     fun answerCall(){
-        val n = nextOperator
+        val n = nextRepresentative
 
         if (isAvailable){
             // Answer
@@ -31,51 +31,49 @@ class Operator(name: String){
     }
 }
 
-class CallCenter {
-    // Call Center -- Operator
+class CustomerService {
+    // Customer Service -- Representative
 
-    private val agents = ArrayList<Operator>()
+    private val agents = ArrayList<Representative>()
 
     init {
-        val o1 = Operator("Trevor")
-        val o2 = Operator("Michael")
-        val o3 = Operator("Franklin")
-        val o4 = Operator("Jimmy")
+        val r1 = Representative("Trevor")
+        val r2 = Representative("Michael")
+        val r3 = Representative("Franklin")
+        val r4 = Representative("Jimmy")
 
-        o1.isAvailable = false
-        o2.isAvailable = false
-        o3.isAvailable = true // Franklin is available
-        o4.isAvailable = false
+        r1.isAvailable = false
+        r2.isAvailable = true // Michael is available
+        r3.isAvailable = false
+        r4.isAvailable = false
 
-        o1.nextOperator = o2
-        o2.nextOperator = o3
-        o3.nextOperator = o4
-        o4.nextOperator = null
+        r1.nextRepresentative = r2
+        r2.nextRepresentative = r3
+        r3.nextRepresentative = r4
+        r4.nextRepresentative = null
 
-        agents.add(o1)
-        agents.add(o2)
-        agents.add(o3)
-        agents.add(o4)
+        agents.add(r1)
+        agents.add(r2)
+        agents.add(r3)
+        agents.add(r4)
     }
 
     fun receiveCall() {
-        // Give task to first operator
+        // Give task to first representative
         agents[0].answerCall()
     }
 }
 
 class Client {
-    // Client -<<use>>-> Call Center
+    // Client -<<use>>-> Customer Service
     companion object {
-        fun openCall(cc: CallCenter) {
-            cc.receiveCall()
+        fun openCall(cs: CustomerService) {
+            cs.receiveCall()
         }
     }
 }
 
 // TEST
 fun main(){
-    // Clients know operators
-    // Operators know clients
-    Client.openCall(CallCenter())
+    Client.openCall(CustomerService())
 }

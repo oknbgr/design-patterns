@@ -9,14 +9,14 @@ package behavioral
 // Real life example for OP can be how a scientists observe in their experiments.
 
 interface IObservable {
-    // IObservable -> Control
+    // Observable interface -> Control
     fun register(c: Control)
     fun unregister(c: Control)
     fun sendNotification()
 }
 
 class Stock: IObservable {
-    // Stock -> IObservable
+    // Stock -> Observable interface
 
     private var mCount: Int = 0
     private val controller: ArrayList<Control> = ArrayList()
