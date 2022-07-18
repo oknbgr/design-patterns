@@ -10,85 +10,85 @@ package behavioral
 
 // Real life example of this pattern can be how ATMs work.
 
-class ATM {
-    fun clear(){
-        println("ATM::CLEAR")
+class SocialMediaApp {
+    fun like(){
+        println("User liked your post.")
     }
-    fun enter(){
-        println("ATM::ENTER")
+    fun comment(){
+        println("User commented on your post.")
     }
-    fun delete(){
-        println("ATM::DELETE")
+    fun follow(){
+        println("User followed you.")
     }
 }
 
 // Abstract Command
-interface Command {
-    fun execute()
+interface SendRequest {
+    fun getResponse()
 }
 
 // Concrete Commands
-class ClearScreen : Command {
-    // Clear Screen -> execute
+class Like : SendRequest {
+    // Like -> Send Request
 
-    private var atm: ATM? = null
+    private var app: SocialMediaApp? = null
 
     init {
-        atm = ATM()
+        app = SocialMediaApp()
     }
 
-    override fun execute() {
-        atm?.clear()
+    override fun getResponse() {
+        app?.like()
     }
 }
-class Delete : Command {
-    // Delete -> execute
+class Comment : SendRequest {
+    // Comment -> Send Request
 
-    private var atm: ATM? = null
+    private var app: SocialMediaApp? = null
 
     init {
-        atm = ATM()
+        app = SocialMediaApp()
     }
 
-    override fun execute() {
-        atm?.delete()
+    override fun getResponse() {
+        app?.comment()
     }
 }
-class Enter : Command {
-    // Enter -> execute
+class Follow : SendRequest {
+    // Follow -> Send Request
 
-    private var atm: ATM? = null
+    private var app: SocialMediaApp? = null
 
     init {
-        atm = ATM()
+        app = SocialMediaApp()
     }
 
-    override fun execute() {
-        atm?.enter()
+    override fun getResponse() {
+        app?.follow()
     }
 }
 
 // Invoker
-class KeyPad {
-    // Invoker -> Command
+class AppUI {
+    // App UI -> Send Request
 
-    private var commands = HashMap<String, Command>()
+    private var requests = HashMap<String, SendRequest>()
 
     init {
-        commands["Delete"] = Delete()
-        commands["Enter"] = Enter()
-        commands["Clear"] = ClearScreen()
+        requests["Comment"] = Comment()
+        requests["Follow"] = Follow()
+        requests["Like"] = Like()
     }
 
-    fun runCommand(commandName: String){
-        commands[commandName]?.execute()
+    fun sendRequests(commandName: String){
+        requests[commandName]?.getResponse()
     }
 }
 
 // TEST
 fun main(){
-    val kp = KeyPad()
-    kp.runCommand("Enter")
-    kp.runCommand("Delete")
-    kp.runCommand("Clear")
+    val app = AppUI()
+    app.sendRequests("Comment")
+    app.sendRequests("Like")
+    app.sendRequests("Follow")
 }

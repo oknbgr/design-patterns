@@ -6,93 +6,94 @@ package behavioral
 
 // Real life example of SP can be how we put our phones in silent, vibrate, sound modes.
 
-interface IThreadState {
-    fun run(context: ThreadContext)
-    fun stop(context: ThreadContext)
-    fun wait(context: ThreadContext)
+interface ICarState {
+    fun gas(context: CarContext)
+    fun brake(context: CarContext)
+    fun turn(context: CarContext)
 }
 
-class ThreadContext {
-    // Thread Context -> Thread State interface
-    var state: IThreadState
+class CarContext {
+    // Car Context -> Car State interface
+    var state: ICarState
 
     init {
-        println("Thread is created and not running yet.")
+        println("Started car's engine...")
         state = StoppedState()
     }
 
-    fun start(){
-        state.run(this)
+    fun accelerate(){
+        state.gas(this)
     }
 
-    fun abort(){
-        state.stop(this)
+    fun decelerate(){
+        state.brake(this)
     }
 
-    fun sleep(){
-        state.wait(this)
+    fun steer(){
+        state.turn(this)
     }
 }
 
-class RunningState : IThreadState {
-    // Running State -> Thread State interface
-    override fun run(context: ThreadContext) {
-        println("Thread is already running.")
+class GoingState : ICarState {
+    // Going State -> Car State interface
+    override fun gas(context: CarContext) {
+        println("Car is speeding.")
     }
 
-    override fun stop(context: ThreadContext) {
+    override fun brake(context: CarContext) {
         context.state = StoppedState()
-        println("Thread stopped.")
+        println("Car slowing down.")
     }
 
-    override fun wait(context: ThreadContext) {
-        context.state = WaitingState()
-        println("Thread is temporarily put out of schedule.")
-    }
-}
-
-class StoppedState : IThreadState {
-    // Stopped State -> Thread State interface
-    override fun run(context: ThreadContext) {
-        context.state = RunningState()
-        println("Thread started to run.")
-    }
-
-    override fun stop(context: ThreadContext) {
-        println("Thread is already stopped.")
-    }
-
-    override fun wait(context: ThreadContext) {
-        println("Cannot put on wait a stopped thread.")
+    override fun turn(context: CarContext) {
+        context.state = TurningState()
+        println("Car is changing direction.")
     }
 }
 
-class WaitingState : IThreadState {
-    // Waiting State -> Thread State interface
-    override fun run(context: ThreadContext) {
-        context.state = RunningState()
-        println("Thread put on schedule while it was waiting.")
+class StoppedState : ICarState {
+    // Stopped State -> Car State interface
+    override fun gas(context: CarContext) {
+        context.state = GoingState()
+        println("Car starts moving.")
     }
 
-    override fun stop(context: ThreadContext) {
+    override fun brake(context: CarContext) {
+        println("Car stopped.")
+    }
+
+    override fun turn(context: CarContext) {
+        println("Car can't turn while not moving.")
+    }
+}
+
+class TurningState : ICarState {
+    // Turning State -> Car State interface
+    override fun gas(context: CarContext) {
+        context.state = GoingState()
+        println("Car started drifting!")
+    }
+
+    override fun brake(context: CarContext) {
         context.state = StoppedState()
-        println("Waiting thread is now fully stopped.")
+        println("Car slowing down.")
     }
 
-    override fun wait(context: ThreadContext) {
-        println("Thread is already waiting.")
+    override fun turn(context: CarContext) {
+        println("Car going straight again.")
     }
 }
 
 // TEST
 fun main(){
-    val thread = ThreadContext()
-    thread.start()
-    thread.start()
-    thread.sleep()
-    thread.start()
-    thread.abort()
-    thread.start()
-    thread.abort()
-    thread.abort()
+    val car = CarContext()
+    car.accelerate()
+    car.accelerate()
+    car.steer()
+    car.accelerate()
+    car.decelerate()
+    car.accelerate()
+    car.decelerate()
+    car.steer()
+    car.decelerate()
 }

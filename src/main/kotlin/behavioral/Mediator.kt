@@ -89,6 +89,6 @@ fun main(){
 
     println("-------------------------------")
 
-    mr.sendMessage(p5, p2, "Iphones are expensive.")
-    mr.sendMessage(p2, p5, "Definitely!")
+    mr.sendMessage(p4, p2, "Iphones are expensive.")
+    mr.sendMessage(p2, p4, "Definitely!")
 }

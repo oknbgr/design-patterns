@@ -9,77 +9,77 @@ package behavioral
 // for one problem.
 
 // Abstract Strategy
-interface Brush {
-    fun paint()
+interface Education {
+    fun learn()
 }
 
 // Concrete Strategy Classes
-class SolidBrush : Brush {
-    // Solid Brush -> Brush
-    override fun paint() {
-        println("Paint with single color")
+class SelfTaught : Education {
+    // Self Taught -> Education
+    override fun learn() {
+        println("Learnt from self taught.")
     }
 }
 
-class LinearGradientBrush : Brush {
-    // Linear Gradient Brush -> Brush
-    override fun paint() {
-        println("Linear paint with multiple colors")
+class University : Education {
+    // University -> Education
+    override fun learn() {
+        println("Learnt from university.")
     }
 }
 
-class RadialGradientBrush : Brush {
-    // Radial Gradient Brush -> Brush
-    override fun paint() {
-        println("Radial paint with multiple colors")
+class Bootcamp : Education {
+    // Bootcamp -> Education
+    override fun learn() {
+        println("Learnt from bootcamp.")
     }
 }
 
 // Context
-class Rectangle(b: Brush){
-    // Rectangle -> Brush
-    private var b: Brush
+class MobileDev(e: Education){
+    // Mobile Developer -> Education
+    private var e: Education
 
     init {
-        this.b = b
+        this.e = e
     }
 
-    fun draw(){
-        b.paint()
-        println("Rectangle")
+    fun become(){
+        e.learn()
+        println("Mobile Developer")
     }
 }
 
-class Circle(b: Brush){
-    // Circle -> Brush
-    private var b: Brush
+class WebDev(e: Education){
+    // Web Developer -> Education
+    private var e: Education
 
     init {
-        this.b = b
+        this.e = e
     }
 
-    fun draw(){
-        b.paint()
-        println("Circle")
+    fun become(){
+        e.learn()
+        println("Web Developer")
     }
 }
 
 // TEST
 fun main(){
-    val b1 = SolidBrush()
-    val b2 = LinearGradientBrush()
-    val b3 = RadialGradientBrush()
+    val e1 = SelfTaught()
+    val e2 = University()
+    val e3 = Bootcamp()
 
-    val r1 = Rectangle(b1)
-    r1.draw()
-
-    println("----------------------------------")
-
-    val r2 = Rectangle(b2)
-    r2.draw()
+    val md1 = MobileDev(e1)
+    md1.become()
 
     println("----------------------------------")
 
-    val c = Circle(b3)
-    c.draw()
+    val md2 = MobileDev(e2)
+    md2.become()
+
+    println("----------------------------------")
+
+    val wd = WebDev(e3)
+    wd.become()
 }
